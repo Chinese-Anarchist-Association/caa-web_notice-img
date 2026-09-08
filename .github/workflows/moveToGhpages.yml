@@ -1,0 +1,54 @@
+name: Move to gh-pages
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'img/**'
+      - 'index.html'
+      - 'CNAME'
+      - 'noticeData.json'
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+          persist-credentials: false
+          lfs: true #启用lfs支持
+
+    - name: Pull LFS files #拉取lfs中的实际文件
+      run: git lfs pull
+
+    - name: Create dist folder
+      run: |
+        mkdir dist
+
+    - name: Copy files to the dist folder
+      run: |
+        cp -Rv img dist/
+        cp -v index.html dist/
+        cp -v CNAME dist/
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+        publish_branch: gh-pages
+        full_commit_message: '${{ github.event.head_commit.message }} (Deployed via GitHub Actions)'
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
