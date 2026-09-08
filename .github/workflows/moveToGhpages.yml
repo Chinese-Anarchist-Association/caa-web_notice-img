@@ -42,6 +42,7 @@ jobs:
         cp -Rv img dist/
         cp -v index.html dist/
         cp -v CNAME dist/
+        cp -v noticeData.json dist/
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
