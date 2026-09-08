@@ -1,9 +1,6 @@
 [
     {
-        "path":"test.png"
-    },
-    {
-        "path":"test2.png.enc",
+        "path":"hg.png.enc",
         "isEnc":true
     }
 ]
